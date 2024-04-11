@@ -93,6 +93,13 @@ plot(t_values, vecnorm(F_values));
 title('Magnitude of F over time');
 xlabel('Time [s]');
 ylabel('Magnitude of F [N]');
+figure;
+
+% To illustrate the position of the earth
+for i = 1:length(t_values)
+    r_earth(:,i) = [-sin(2*pi*t_values(i)/tau_e), cos(2*pi*t_values(i)/tau_e), 0] * a_e;
+end
+plot(t_values,r_earth(1, :), 'r', t_values, r_earth(2, :), 'g', t_values, r_earth(3, :), 'b');
 
 % Plot the components of F over time
 % figure;

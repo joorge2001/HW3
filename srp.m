@@ -1,16 +1,16 @@
 function F = srp(t,COE)
-    % -------------------------------------------------------------------------
-    % Function to compute the force F, on the sail due to the
-    % solar radiation pressure when it at a time is t since the solstice 
-    % ignoring eclipses.
-    
-    % Inputs: 
-    %     - t: time elapsed since summer solstice [s]
+% -------------------------------------------------------------------------
+% Function to compute the force F, on the sail due to the
+% solar radiation pressure when it at a time is t since the solstice 
+% ignoring eclipses.
 
-    % Outputs:
-    %     - F: force produced on the sail due to the solar radiation 
-    %          pressure [N]
-    % -------------------------------------------------------------------------
+% Inputs: 
+%     - t: time elapsed since summer solstice [s]
+
+% Outputs:
+%     - F: force produced on the sail due to the solar radiation 
+%          pressure [N]
+% -------------------------------------------------------------------------
 
 % Data
 h = 6.62607015e-34; % [J/Hz] Planck's constant
@@ -47,8 +47,8 @@ obliquity = deg2rad(23.44);
 % r is in the ecliptic frame and points from earth to satellite
 
 % Calculate the position of the Earth at time t since the solstice
-r_earth = [cos(2*pi*t/tau_e), sin(2*pi*t/tau_e), 0] * a_e; % [km] vector from sun to earth
-
+r_earth = [-sin(2*pi*t/tau_e), cos(2*pi*t/tau_e), 0] * a_e; % [km] vector from sun to earth
+% x term is negative due to prograde orbit
 % Calculate the unit vector pointing to the Sun
 u_v = -r_earth / norm(r_earth); % The Sun is in the opposite direction of the Earth
 
