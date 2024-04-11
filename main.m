@@ -43,11 +43,12 @@ i = deg2rad(33); % [rad]
 omega = deg2rad(198); % [rad] 
 theta = deg2rad(48); % [rad]
 
+COE = [a,e,i,raan,omega,theta];
+
 % consider the orbit of the earth around the sun
 e_e = 0; % we assume circular orbit around the sun
 a_e = 149597870.7; % [km] we use the value of 1au to set the semi-major axis of the earth's
 % orbit
-tau_e = 2*pi*sqrt(a_e^3/muS);
 
 obliquity = deg2rad(23.44); % [rad] obliquity of the ecliptic
 % shade of the earth is an ideal cylinder and only perturbation in 
@@ -61,6 +62,63 @@ obliquity = deg2rad(23.44); % [rad] obliquity of the ecliptic
 
 [a_ec,e_ec,i_ec,raan_ec,omega_ec,theta_ec] = rv2COE(muE,r0_ec,v0_ec);
 
+i_ec = rad2deg(i_ec);
+raan_ec = rad2deg(raan_ec);
+omega_ec = rad2deg(omega_ec);
+theta_ec = rad2deg(theta_ec);
+
 %% Part (b)
 
-% F = srp(t);
+% t = 0 when earth at summer solstice 
+
+tau_e = 2*pi*sqrt(a_e^3/muS);
+% t = tau;
+% F = srp(t,COE);
+
+% Plots
+% Define the time range
+t_values = linspace(0, tau_e, 100); % 1000 points from 0 to tau
+
+% Initialize F_values for storing the results
+F_values = zeros(3, length(t_values));
+
+% Calculate F for each time value
+for i = 1:length(t_values)
+    F_values(:, i) = srp(t_values(i), COE); % CAMBIAR EL INPUT DE LOS COE
+end
+
+% Plot the magnitude of F over time
+figure;
+plot(t_values, vecnorm(F_values));
+title('Magnitude of F over time');
+xlabel('Time [s]');
+ylabel('Magnitude of F [N]');
+
+% Plot the components of F over time
+% figure;
+% plot(t_values, F_values(1, :), 'r');
+% title('F_x over time');
+% xlabel('Time [s]');
+% ylabel('F [N]');
+% legend('F_x')
+% 
+% figure;
+% plot(t_values, F_values(2, :), 'r');
+% title('F_y over time');
+% xlabel('Time [s]');
+% ylabel('F [N]');
+% legend('F_y')
+% 
+% figure;
+% plot(t_values, F_values(3, :), 'r');
+% title('F_z over time');
+% xlabel('Time [s]');
+% ylabel('F [N]');
+% legend('F_z')
+
+figure;
+plot(t_values, F_values(1, :), 'r', t_values, F_values(2, :), 'g', t_values, F_values(3, :), 'b');
+title('Components of F over time');
+xlabel('Time [s]');
+ylabel('F [N]');
+legend('F_x', 'F_y', 'F_z');
