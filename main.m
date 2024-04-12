@@ -34,18 +34,11 @@ rB = 6371; % [km]
 muE = 3.986e5; % [km3/s2]
 muS = 1.32712440018e11; % [km3/s2]
 
-%COE AT SUMMER SOLSTICE IN EQUATORIAL ECI RF
-zeta_p = 1800; % [km] altitude at pericenter
-e = 0.1; % eccentricity 
-a = (zeta_p+rB)/(1-e); % [km] semi-major axis
-raan = deg2rad(295); % [rad] 
-i = deg2rad(33); % [rad]
-omega = deg2rad(198); % [rad] 
-theta = deg2rad(48); % [rad]
+COE = hw3data();
 
-COE = [a,e,i,raan,omega,theta];
 name = {'Earth';'Satellite'};
-ellipticOrbitPlotter(COE,muE,name,rB,1)
+title_graph = {'Initial situation in an ECI-eq RF'};
+ellipticOrbitPlotter(COE,muE,name,title_graph,rB,1)
 
 % consider the orbit of the earth around the sun
 e_e = 0; % we assume circular orbit around the sun
@@ -58,11 +51,17 @@ obliquity = deg2rad(23.44); % [rad] obliquity of the ecliptic
 
 %% Part (a)
 
-[r0,v0] = COE2rv(a,e,i,raan,omega,theta,muE);
+[r0,v0] = COE2rv(COE(1),COE(2),COE(3),COE(4),COE(5),COE(6),muE);
 
 [r0_ec,v0_ec] = EQ2EC(r0,v0,obliquity);
 
 [a_ec,e_ec,i_ec,raan_ec,omega_ec,theta_ec] = rv2COE(muE,r0_ec,v0_ec);
+
+COE2 = [a_ec,e_ec,i_ec,raan_ec,omega_ec,theta_ec];
+name = {'Earth';'Satellite ec'};
+title_graph = {'Initial situation in an ECI-ec RF'};
+ellipticOrbitPlotter(COE2,muE,name,title_graph,rB,1)
+
 
 i_ec = rad2deg(i_ec);
 raan_ec = rad2deg(raan_ec);
@@ -72,23 +71,22 @@ theta_ec = rad2deg(theta_ec);
 %% Part (b)
 
 % t = 0 when earth at summer solstice 
-
+tau = 2*pi*sqrt(COE(1)^3/muE);
 tau_e = 2*pi*sqrt(a_e^3/muS);
-n = 2*pi / tau_e;
-t = 0.3*tau_e;
-F = srp(t,COE);
+n = 2*pi / tau;
+n_e = 2*pi / tau_e;
 
 %%
 % Plots
 % Define the time range
-t_values = linspace(0, tau_e, 10); % 1000 points from 0 to tau
+t_values = linspace(0, tau_e, 1000); % 1000 points from 0 to tau
 
 % Initialize F_values for storing the results
 F_values = zeros(3, length(t_values));
 
 % Calculate F for each time value
 for i = 1:length(t_values)
-    F_values(:, i) = srp(t_values(i), COE); % CAMBIAR EL INPUT DE LOS COE!!!!!!!!!
+    F_values(:, i) = srp(t_values(i));
 end
 
 % Plot the magnitude of F over time
@@ -97,43 +95,31 @@ plot(t_values, vecnorm(F_values));
 title('Magnitude of F over time');
 xlabel('Time [s]');
 ylabel('Magnitude of F [N]');
-figure;
 
-% To illustrate the position of the earth
+% To illustrate the position of the earth and satellite
 for i = 1:length(t_values)
     r_earth(:,i) = [-sin(2*pi*t_values(i)/tau_e), cos(2*pi*t_values(i)/tau_e), 0] * a_e;
-    [r0, ~] = COE2rv(COE(1), COE(2), COE(3), COE(4), COE(5), COE(6) + n*t_values(i),muE);
-    [r0_ec,~] = EQ2EC(r0,v0,obliquity);
-    r_sat_sun(:,i) = r0_ec + r_earth(:,i);
-    if norm(r_sat_sun(:,i)) > norm(r_earth(:,i))
-        disp('SIII')
-    end
+    [r0, v0] = COE2rv(COE(1), COE(2), COE(3), COE(4), COE(5), COE(6) + n*t_values(i),muE);
+    r0_plot(:,i) = r0;
+    [r0_ec(:,i),~] = EQ2EC(r0,v0,obliquity);
+    r_sat_sun(:,i) = r0_ec(:,i) + r_earth(:,i);
 end
-plot(t_values,r_earth(1, :), 'r', t_values, r_earth(2, :), 'g', t_values, r_earth(3, :), 'b');
-hold on
-plot(t_values,r_sat_sun(1, :), t_values, r_sat_sun(2, :), t_values, r_sat_sun(3, :));
 
-% Plot the components of F over time
-% figure;
-% plot(t_values, F_values(1, :), 'r');
-% title('F_x over time');
-% xlabel('Time [s]');
-% ylabel('F [N]');
-% legend('F_x')
-% 
-% figure;
-% plot(t_values, F_values(2, :), 'r');
-% title('F_y over time');
-% xlabel('Time [s]');
-% ylabel('F [N]');
-% legend('F_y')
-% 
-% figure;
-% plot(t_values, F_values(3, :), 'r');
-% title('F_z over time');
-% xlabel('Time [s]');
-% ylabel('F [N]');
-% legend('F_z')
+figure;
+plot3(r_earth(1, :), r_earth(2, :),r_earth(3, :), 'b');
+hold on
+plot3(r_sat_sun(1, :), r_sat_sun(2, :),r_sat_sun(3, :), 'r');
+title('Position of the Earth and the satellite that orbits it over time ');
+legend('Earth','Satellite');
+xlabel('x [km]');
+ylabel('y [km]');
+zlabel('z [km]')
+
+figure;
+plot(t_values, r_sat_sun(1, :), 'r', t_values, r_sat_sun(2, :), 'g', t_values, r_sat_sun(3, :), 'b');
+xlabel('Time [s]');
+ylabel('r [km]');
+legend('$r_x$', '$r_y$', '$r_z$');
 
 figure;
 plot(t_values, F_values(1, :), 'r', t_values, F_values(2, :), 'g', t_values, F_values(3, :), 'b');

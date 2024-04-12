@@ -1,4 +1,4 @@
-function F = srp(t,COE)
+function F = srp(t)
 % -------------------------------------------------------------------------
 % Function to compute the force F, on the sail due to the
 % solar radiation pressure when it at a time is t since the solstice 
@@ -13,8 +13,7 @@ function F = srp(t,COE)
 % -------------------------------------------------------------------------
 
 % Data
-h = 6.62607015e-34; % [J/Hz] Planck's constant
-S_e = 1367; % [W/m^2] goes with 1/r^2
+COE = hw3data();
 P = 4.560e-6; % [N/m^2]
 A = 20; % [m^2]
 R = 1; % Maximal reflection coefficient
@@ -25,8 +24,11 @@ muS = 1.32712440018e11; % [km3/s2]
 a_e = 149597870.7; % [km] we use the value of 1au to set the semi-major axis of the earth's
 % orbit
 
-tau_e = 2*pi*sqrt(a_e^3/muS); % [s] period of the Earth's orbit
-n = 2*pi / tau_e; % [rad/s] mean motion of the Earth
+tau_e = 2*pi*sqrt(a_e^3/muS); % [s] period of the Earth's orbit around the Sun
+tau = 2*pi*sqrt(COE(1)^3/muE); % [s] period of the satellite's orbit around the Earth
+
+n = 2*pi / tau; % [rad/s] mean motion of the satellite around the earth
+
 
 truean = COE(6)+n*t;
 
@@ -44,14 +46,14 @@ obliquity = deg2rad(23.44);
 
 [r0_ec,~] = EQ2EC(r0,v0,obliquity);
 
-flag = eclipse(r0_ec,t);
+flag = eclipse(r0_ec,t); % r0_ec is in the ecliptic frame and points from earth to satellite
 disp(flag);
 
-% r is in the ecliptic frame and points from earth to satellite
 
 % Calculate the position of the Earth at time t since the solstice
 r_earth = [-sin(2*pi*t/tau_e), cos(2*pi*t/tau_e), 0] * a_e; % [km] vector from sun to earth
 % x term is negative due to prograde orbit
+
 % Calculate the unit vector pointing to the Sun
 u_v = -r_earth / norm(r_earth); % The Sun is in the opposite direction of the Earth
 

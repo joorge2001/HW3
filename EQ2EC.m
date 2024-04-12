@@ -7,7 +7,7 @@ function [r0_ec,v0_ec] = EQ2EC(r0,v0,obliquity)
 %     - r0: position vector in ECI-eq reference frame [3x1]
 %     - v0: velocity vector in ECI-eq reference frame [3x1]
 %     - obliquity = angle between the bodie's equatorial plane and its 
-%                   orbital plane.
+%                   orbital plane. [rad]
 %     
 % Outputs:
 %     - r0_ec: position vector in ECI-ec reference frame [3x1]

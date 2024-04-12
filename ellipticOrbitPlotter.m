@@ -1,4 +1,4 @@
-function [] = ellipticOrbitPlotter(COE,mu,name,rB,flag)
+function [] = ellipticOrbitPlotter(COE,mu,name,title_graph,rB,flag)
 % -------------------------------------------------------------------------
 % Function to plot the orbit of an spacecraft and its position according to
 % the problem.
@@ -12,6 +12,7 @@ function [] = ellipticOrbitPlotter(COE,mu,name,rB,flag)
 %       - omega: argument of periapsis [rad]
 %       - theta: true anomaly [rad]
 %     - name: name of the celestial body and orbits in a column vector
+%     - title: title of the plot
 %     - rB: radius of the celestial body
 %     - flag: a binary value:
 %       - If flag = 0 the position of the spacecraft is not shown. 
@@ -76,7 +77,7 @@ view(3)
 xlabel('x [km]')
 ylabel('y [km]')
 zlabel('z [km]')
-title('Representation of the problem')
+title(title_graph)
 legend(Legend,'Location','southoutside','Orientation','horizontal')
 grid on
 axis equal
