@@ -44,6 +44,9 @@ obliquity = deg2rad(23.44);
 
 [r0_ec,~] = EQ2EC(r0,v0,obliquity);
 
+flag = eclipse(r0_ec,t);
+disp(flag);
+
 % r is in the ecliptic frame and points from earth to satellite
 
 % Calculate the position of the Earth at time t since the solstice

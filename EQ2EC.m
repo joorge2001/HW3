@@ -14,7 +14,7 @@ function [r0_ec,v0_ec] = EQ2EC(r0,v0,obliquity)
 %     - v0_ec: velocity vector in ECI-ec reference frame [3x1]
 % -------------------------------------------------------------------------
 
-% Rotation matrix
+% Rotation matrix (counterclockwise rotation)
 R = [1, 0, 0;
      0, cos(obliquity), sin(obliquity);
      0, -sin(obliquity), cos(obliquity)];
