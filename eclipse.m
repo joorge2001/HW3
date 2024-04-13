@@ -20,10 +20,11 @@ rE = 6371; % [km] Earth's radius
 a_e = 149597870.7;
 muS = 1.32712440018e11; % [km3/s2]
 tau_e = 2*pi*sqrt(a_e^3/muS); % [s] period of the Earth's orbit
+n_e = 2*pi / tau_e; % [rad/s] mean motion of the Earth's orbit
 
 % Calculate the position vector of the earth and satellite seen in the 
 % sun centric reference frame
-r_earth = [-sin(2*pi*t/tau_e), cos(2*pi*t/tau_e), 0] * a_e; % [km] vector from sun to earth
+r_earth = [-sin(n_e*t), cos(n_e*t), 0] * a_e; % [km] vector from sun to earth
 
 r_sat_sun = r' + r_earth;
 

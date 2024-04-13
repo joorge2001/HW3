@@ -27,10 +27,10 @@ set(groot, 'defaultLegendInterpreter', 'latex');
 %% 
 
 m = 100; % [kg]
-S_ss = 20; % [m^2] always points towards the sun
+S = 20; % [m^2] always points towards the sun
 % orbit around earth
 
-rB = 6371; % [km]
+rE = 6371; % [km]
 muE = 3.986e5; % [km3/s2]
 muS = 1.32712440018e11; % [km3/s2]
 
@@ -38,7 +38,7 @@ COE = hw3data();
 
 name = {'Earth';'Satellite'};
 title_graph = {'Initial situation in an ECI-eq RF'};
-ellipticOrbitPlotter(COE,muE,name,title_graph,rB,1)
+ellipticOrbitPlotter(COE,muE,name,title_graph,rE,1)
 
 % consider the orbit of the earth around the sun
 e_e = 0; % we assume circular orbit around the sun
@@ -53,14 +53,14 @@ obliquity = deg2rad(23.44); % [rad] obliquity of the ecliptic
 
 [r0,v0] = COE2rv(COE(1),COE(2),COE(3),COE(4),COE(5),COE(6),muE);
 
-[r0_ec,v0_ec] = EQ2EC(r0,v0,obliquity);
+[r1_ec,v1_ec] = EQ2EC(r0,v0,obliquity);
 
-[a_ec,e_ec,i_ec,raan_ec,omega_ec,theta_ec] = rv2COE(muE,r0_ec,v0_ec);
+[a_ec,e_ec,i_ec,raan_ec,omega_ec,theta_ec] = rv2COE(muE,r1_ec,v1_ec);
 
 COE2 = [a_ec,e_ec,i_ec,raan_ec,omega_ec,theta_ec];
 name = {'Earth';'Satellite ec'};
 title_graph = {'Initial situation in an ECI-ec RF'};
-ellipticOrbitPlotter(COE2,muE,name,title_graph,rB,1)
+ellipticOrbitPlotter(COE2,muE,name,title_graph,rE,1)
 
 
 i_ec = rad2deg(i_ec);
@@ -101,8 +101,8 @@ for i = 1:length(t_values)
     r_earth(:,i) = [-sin(2*pi*t_values(i)/tau_e), cos(2*pi*t_values(i)/tau_e), 0] * a_e;
     [r0, v0] = COE2rv(COE(1), COE(2), COE(3), COE(4), COE(5), COE(6) + n*t_values(i),muE);
     r0_plot(:,i) = r0;
-    [r0_ec(:,i),~] = EQ2EC(r0,v0,obliquity);
-    r_sat_sun(:,i) = r0_ec(:,i) + r_earth(:,i);
+    [r1_ec(:,i),~] = EQ2EC(r0,v0,obliquity);
+    r_sat_sun(:,i) = r1_ec(:,i) + r_earth(:,i);
 end
 
 figure;
@@ -117,6 +117,7 @@ zlabel('z [km]')
 
 figure;
 plot(t_values, r_sat_sun(1, :), 'r', t_values, r_sat_sun(2, :), 'g', t_values, r_sat_sun(3, :), 'b');
+title('Components of $\overrightarrow{r}^{s}_{2}$ over time');
 xlabel('Time [s]');
 ylabel('r [km]');
 legend('$r_x$', '$r_y$', '$r_z$');
