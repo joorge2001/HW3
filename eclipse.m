@@ -34,11 +34,8 @@ angle = abs(acos(dot(r_sat_sun, r_earth) / (norm(r_sat_sun) * norm(r_earth))));
 % Calculate the critical angle
 critical_angle = abs(atan(rE/a_e));
 
-disp(angle);
-
 d = (norm(r_sat_sun)*cos(angle));
 
-disp(d);
 if (angle < critical_angle) && (d > a_e)
     flag = true;
 else

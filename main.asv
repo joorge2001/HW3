@@ -76,10 +76,13 @@ tau_e = 2*pi*sqrt(a_e^3/muS);
 n = 2*pi / tau;
 n_e = 2*pi / tau_e;
 
+%% Part (d)
+
 %% Part (e)
 sidereal_day = 23 + 56/60;              % duration of a sidereal day [hours]
-t_final = 5*365*sidereal_day*3600;      % final time (5 years) in seconds
-dt = 60;                                % integration time step [seconds]
+% t_final = 5*365*sidereal_day*3600;      % final time (5 years) in seconds
+t_final = sidereal_day*3600;
+dt = 60;                                % integration step [seconds]
 t = 0:dt:t_final;                       % time vector over which the function will be integrated
 
 rr0 = r1_ec;        % initial position of the satellite at Summer Solstice [km]
@@ -105,12 +108,6 @@ for k = 1:length(t)
     
     % Obtain orbital elements
     [a(k),e(k),i(k),RAAN(k),omega(k),theta(k)] = rv2COE(muE,rr,vv);
-    
-    i(k) = rad2deg(i(k));
-    RAAN(k) = rad2deg(RAAN(k));
-    omega(k) = rad2deg(omega(k));
-    theta(k) = rad2deg(theta(k));
-    
 end
 
 % Plot the evolution of the Orbital Elements over time
@@ -132,25 +129,25 @@ subplot(3,2,3);
 plot(t, i);
 title('Inclination: $i$')
 xlabel('time [s]')
-ylabel('$i [^\circ]$')
+ylabel('$i$ [º]')
 
 subplot(3,2,4);
 plot(t, RAAN);
 title('RAAN: $\Omega$')
 xlabel('time [s]')
-ylabel('$\Omega [^\circ]$')
+ylabel('$\Omega$ [º]')
 
 subplot(3,2,5);
-plot(t, omega);
+plot(omega,t);
 title('Argument of Periapsis: $\omega$')
 xlabel('time [s]')
-ylabel('$\omega [^\circ]$')
+ylabel('$\omega$ [º]')
 
 subplot(3,2,6);
-plot(t, theta);
+plot(theta,t);
 title('True Anomaly: $\theta$')
 xlabel('time [s]')
-ylabel('$\theta [^\circ]$')
+ylabel('$\theta$ [º]')
 
 
 %% Plots
