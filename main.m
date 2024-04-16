@@ -34,7 +34,16 @@ rE = 6371; % [km]
 muE = 3.986e5; % [km3/s2]
 muS = 1.32712440018e11; % [km3/s2]
 
-COE = hw3data();
+%COE AT SUMMER SOLSTICE IN EQUATORIAL ECI RF
+zeta_p = 1800; % [km] altitude at pericenter
+e = 0.1; % eccentricity 
+a = (zeta_p+rE)/(1-e); % [km] semi-major axis
+raan = deg2rad(295); % [rad] 
+i = deg2rad(33); % [rad]
+omega = deg2rad(198); % [rad] 
+theta = deg2rad(48); % [rad]
+
+COE = [a,e,i,raan,omega,theta];
 
 name = {'Earth';'Satellite'};
 title_graph = {'Initial situation in an ECI-eq RF'};

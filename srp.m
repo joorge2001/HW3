@@ -9,11 +9,23 @@ function F = srp(t)
 
 % Outputs:
 %     - F: force produced on the sail due to the solar radiation 
-%          pressure [N]
+%          pressure [kN]
 % -------------------------------------------------------------------------
 
 % Data
-COE = hw3data();
+rE = 6371; % [km]
+%COE AT SUMMER SOLSTICE IN EQUATORIAL ECI RF
+zeta_p = 1800; % [km] altitude at pericenter
+e = 0.1; % eccentricity 
+a = (zeta_p+rE)/(1-e); % [km] semi-major axis
+raan = deg2rad(295); % [rad] 
+i = deg2rad(33); % [rad]
+omega = deg2rad(198); % [rad] 
+theta = deg2rad(48); % [rad]
+
+COE = [a,e,i,raan,omega,theta];
+
+
 P = 4.560e-6; % [N/m^2]
 A = 20; % [m^2]
 R = 1; % Maximal reflection coefficient
@@ -29,16 +41,6 @@ tau = 2*pi*sqrt(COE(1)^3/muE); % [s] period of the satellite's orbit around the 
 
 n = 2*pi / tau; % [rad/s] mean motion of the satellite around the earth
 n_e = 2*pi / tau_e; % [rad/s] mean motion of the earth around the sun
-
-truean = COE(6)+n*t;
-
-while truean > 2*pi
-    truean = truean - 2*pi;
-end
-
-while truean < 0
-    truean = truean + 2*pi;
-end
 
 [r0, v0] = COE2rv(COE(1), COE(2), COE(3), COE(4), COE(5), COE(6) + n*t,muE); % COE to position and velocity vector;
 
@@ -61,5 +63,10 @@ theta = acos(dot(n_v, n_v));
 
 % Calculate force F due to solar radiation pressure
 F = -P*A*cos(theta)*((1-R)*n_v + 2*R*cos(theta)*n_v);
+
+% Convert to kN
+F = F * 1e-3;
+
+end
 
 

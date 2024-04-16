@@ -39,7 +39,7 @@ end
 
 % Compute time derivative of state vector
 dX (1:3,1) = vv; 
-dX (4:6,1) = a_m + F_solar/m;
+dX (4:6,1) = a_m + (F_solar/m);
 
 end
 
