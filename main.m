@@ -100,67 +100,7 @@ odefun = @(t,X) evolution(t,X);                     % define the function to int
 
 [t,X] = ode45(odefun, t, X0, options);              % integrate the function
 
-% Initialize Orbital Elements
-a = 0*t;
-e = 0*t;
-i = 0*t;
-RAAN = 0*t;
-omega = 0*t;
-theta = 0*t;
-
-for k = 1:length(t)
-    rr = X(k, 1:3);
-    vv = X(k, 4:6);
-    
-    % Obtain orbital elements
-    [a(k),e(k),i(k),RAAN(k),omega(k),theta(k)] = rv2COE(muE,rr,vv);
-    
-    i(k) = rad2deg(i(k));
-    RAAN(k) = rad2deg(RAAN(k));
-    omega(k) = rad2deg(omega(k));
-    theta(k) = rad2deg(theta(k));
-    
-end
-
-% Plot the evolution of the Orbital Elements over time
-figure
-
-subplot(3,2,1);
-plot(t, a);
-title('Semimajor Axis: $a$')
-xlabel('time [s]')
-ylabel('a [km]')
-
-subplot(3,2,2);
-plot(t, e);
-title('Eccentricity: $e$')
-xlabel('time [s]')
-ylabel('e')
-
-subplot(3,2,3);
-plot(t, i);
-title('Inclination: $i$')
-xlabel('time [s]')
-ylabel('$i [^\circ]$')
-
-subplot(3,2,4);
-plot(t, RAAN);
-title('RAAN: $\Omega$')
-xlabel('time [s]')
-ylabel('$\Omega [^\circ]$')
-
-subplot(3,2,5);
-plot(t, omega);
-title('Argument of Periapsis: $\omega$')
-xlabel('time [s]')
-ylabel('$\omega [^\circ]$')
-
-subplot(3,2,6);
-plot(t, theta);
-title('True Anomaly: $\theta$')
-xlabel('time [s]')
-ylabel('$\theta [^\circ]$')
-
+PlotEvolutionCOEs(t_span, X)
 
 %% Plots
  
