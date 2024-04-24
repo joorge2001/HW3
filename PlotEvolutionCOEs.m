@@ -44,39 +44,39 @@ end
 % Plot the evolution of the Orbital Elements over time
 figure
 plot(t_span, a);
-title('Semimajor Axis: $a$')
-xlabel('time [s]')
-ylabel('a [km]')
+title('Semimajor Axis: $a$','Interpreter', 'latex')
+xlabel('time [s]','Interpreter', 'latex')
+ylabel('a [km]','Interpreter', 'latex')
 
 figure
 plot(t_span, e);
-title('Eccentricity: $e$')
-xlabel('time [s]')
-ylabel('e')
+title('Eccentricity: $e$','Interpreter', 'latex')
+xlabel('time [s]','Interpreter', 'latex')
+ylabel('e','Interpreter', 'latex')
 
 figure
 plot(t_span, i);
-title('Inclination: $i$')
-xlabel('time [s]')
-ylabel('$i [^\circ]$')
+title('Inclination: $i$','Interpreter', 'latex')
+xlabel('time [s]','Interpreter', 'latex')
+ylabel('$i [^\circ]$','Interpreter', 'latex')
 
 figure
 plot(t_span, RAAN);
-title('RAAN: $\Omega$')
-xlabel('time [s]')
-ylabel('$\Omega [^\circ]$')
+title('RAAN: $\Omega$','Interpreter', 'latex')
+xlabel('time [s]','Interpreter', 'latex')
+ylabel('$\Omega [^\circ]$','Interpreter', 'latex')
 
 figure
 plot(t_span, omega);
-title('Argument of Periapsis: $\omega$')
-xlabel('time [s]')
-ylabel('$\omega [^\circ]$')
+title('Argument of Periapsis: $\omega$','Interpreter', 'latex')
+xlabel('time [s]','Interpreter', 'latex')
+ylabel('$\omega [^\circ]$','Interpreter', 'latex')
 
 figure
 plot(t_span, theta);
-title('True Anomaly: $\theta$')
-xlabel('time [s]')
-ylabel('$\theta [^\circ]$')
+title('True Anomaly: $\theta$','Interpreter', 'latex')
+xlabel('time [s]','Interpreter', 'latex')
+ylabel('$\theta [^\circ]$','Interpreter', 'latex')
 
 
 end

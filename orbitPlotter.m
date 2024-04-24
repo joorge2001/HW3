@@ -1,4 +1,4 @@
-function [] = ellipticOrbitPlotter(COE,mu,name,title_graph,rB,flag)
+function [] = orbitPlotter(COE,mu,name,title_graph,rB,flag,param)
 % -------------------------------------------------------------------------
 % Function to plot the orbit of an spacecraft and its position according to
 % the problem.
@@ -14,22 +14,22 @@ function [] = ellipticOrbitPlotter(COE,mu,name,title_graph,rB,flag)
 %     - name: name of the celestial body and orbits in a column vector
 %     - title: title of the plot
 %     - rB: radius of the celestial body
-%     - flag: a binary value:
-%       - If flag = 0 the position of the spacecraft is not shown. 
-%       - If flag = 1 the position of the spacecraft is shown.
+%     - flag: vector of binary values:
+%       - If flag (k) = 0 the position of the spacecraft is not shown. 
+%       - If flag (k) = 1 the position of the spacecraft is shown.
+%     - param: parameter obtained by trial and error to better plot
+%     hyperbolas and parabolas. param = 0 if the orbit is elliptical. 
 %     
 % Outputs:
 %     - Plot in 3D axes comprising one or more orbits, the celestial body for
 %       reference and a highlighted point in the orbit marking its position if 
 %       needed.
 % -------------------------------------------------------------------------
-% Define a range of true anomalies
-nu = linspace(0, 2*pi, 1000);
 
 % Initialize arrays for position vectors
-x = zeros(length(nu), height(COE));
-y = zeros(length(nu), height(COE));
-z = zeros(length(nu), height(COE));
+% x = zeros(length(nu), height(COE));
+% y = zeros(length(nu), height(COE));
+% z = zeros(length(nu), height(COE));
 
 figure
 hold on  
@@ -47,6 +47,14 @@ for k = 1:height(COE)
     raan(k) = COE(k,4);
     omega(k) = COE(k,5);
 
+    % Define a range of true anomalies
+
+    if e(k) < 1
+        nu = linspace(0, 2*pi, 1000);
+    else
+        nu = linspace(-acosh(e(k))-param(k), acosh(e(k))+param(k), 1000);
+    end
+
     for j = 1:length(nu)
     % Replace the true anomaly in the COE
         theta(k) = nu(j);
@@ -61,15 +69,15 @@ for k = 1:height(COE)
     plot3(x(:,k), y(:,k), z(:,k))
     Legend{1+k} = string(name(1+k,:));    
     hold on
-    end
+end
 
-if flag == 1
-    for k = 1:height(COE)
-    [pos,~] = COE2rv(a(k),e(k),i(k),raan(k),omega(k),COE(k,6),mu);
-    p(k) = pos(1);
-    q(k) = pos(2);
-    r(k) = pos(3);
-plot3(p(k),q(k),r(k),'.r','MarkerSize',20)
+for k = 1:height(COE)
+    if flag(k) == 1
+        [pos,~] = COE2rv(a(k),e(k),i(k),raan(k),omega(k),COE(k,6),mu);
+        p(k) = pos(1);
+        q(k) = pos(2);
+        r(k) = pos(3);
+    plot3(p(k),q(k),r(k),'.r','MarkerSize',20)
     end
 end    
 
